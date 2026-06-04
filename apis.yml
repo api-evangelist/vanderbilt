@@ -73,6 +73,10 @@ common:
     url: finops/vanderbilt-finops.yml
   - type: Review
     url: review.yml
+  - type: JSONLD
+    url: json-ld/vanderbilt-context.jsonld
+  - type: Blog
+    url: blogs/blogs.json
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

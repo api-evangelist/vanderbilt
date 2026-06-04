@@ -1,0 +1,14 @@
+{
+  "repo": "vanderbilt",
+  "feeds": [
+    {
+      "source": "https://news.vanderbilt.edu/",
+      "feed_url": "https://news.vanderbilt.edu/feed/",
+      "title": "Vanderbilt University News",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-03T00:00:00Z"
+}

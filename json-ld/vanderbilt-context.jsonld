@@ -1,0 +1,47 @@
+{
+  "@context": {
+    "schema": "https://schema.org/",
+    "vu": "https://www.vanderbilt.edu/ns#",
+    "@vocab": "https://schema.org/",
+    "name": "schema:name",
+    "url": "schema:url",
+    "description": "schema:description",
+    "logo": "schema:logo",
+    "sameAs": "schema:sameAs",
+    "address": "schema:address",
+    "foundingDate": "schema:foundingDate",
+    "department": "schema:department",
+    "CollegeOrUniversity": "schema:CollegeOrUniversity",
+    "EducationalOrganization": "schema:EducationalOrganization",
+    "api": {
+      "@id": "vu:api",
+      "@container": "@set"
+    },
+    "developerPortal": {
+      "@id": "vu:developerPortal",
+      "@type": "@id"
+    },
+    "humanURL": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "baseURL": {
+      "@id": "vu:baseURL",
+      "@type": "@id"
+    }
+  },
+  "@type": "CollegeOrUniversity",
+  "name": "Vanderbilt University",
+  "url": "https://www.vanderbilt.edu/",
+  "description": "Private research university in Nashville, Tennessee.",
+  "sameAs": [
+    "https://github.com/vanderbiltu",
+    "https://github.com/heardlibrary",
+    "https://www.linkedin.com/school/vanderbilt-university/"
+  ],
+  "department": {
+    "@type": "EducationalOrganization",
+    "name": "Vanderbilt IT (VUIT)",
+    "developerPortal": "https://apim-portal.app.vanderbilt.edu/"
+  }
+}
