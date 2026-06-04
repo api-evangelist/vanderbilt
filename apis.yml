@@ -1,0 +1,78 @@
+---
+aid: vanderbilt
+name: Vanderbilt University
+description: >-
+  Vanderbilt University is a private research university in Nashville,
+  Tennessee, ranked #248 in the QS World University Rankings 2025. Its public
+  developer/API footprint is limited and largely gated: Vanderbilt IT (VUIT)
+  offers API integration and management services to faculty and staff, fronted
+  by an Azure API Management developer portal that does not resolve for the
+  general public (internal/network-gated). The Jean and Alexander Heard
+  Libraries maintain an open GitHub presence (linked data, semantic web,
+  institutional repository tooling) and run an Ex Libris Alma/Primo library
+  platform that supports standard OAI-PMH and discovery APIs. No official,
+  publicly documented, self-service Vanderbilt API was confirmed during review.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/vanderbilt/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Research
+  - Nashville
+  - Tennessee
+  - United States
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: vanderbilt:apim-portal
+    name: Vanderbilt API Management Developer Portal
+    description: >-
+      Azure API Management developer portal operated by Vanderbilt IT (VUIT)
+      where authorized users can discover APIs, learn how to use them, try them
+      interactively, and sign up to acquire keys. The portal endpoint does not
+      resolve for the general public during review and appears to be
+      internal/network-gated rather than openly self-service.
+    humanURL: https://apim-portal.app.vanderbilt.edu/
+    tags: [ API Management, Developer Portal, Gated, Azure ]
+    properties:
+      - type: Documentation
+        url: https://apim-portal.app.vanderbilt.edu/
+  - aid: vanderbilt:vuit-api-services
+    name: Vanderbilt IT API Services
+    description: >-
+      Vanderbilt IT Cloud Services builds integrations with third-party systems
+      via web-based APIs and develops custom HTTP REST APIs running from
+      Vanderbilt public or private cloud. This is a staff/faculty consulting and
+      integration service rather than a public, documented API product.
+    humanURL: https://it.vanderbilt.edu/services/catalog/infrastructure/middleware/application_program_interface_services.php
+    tags: [ Integration, Middleware, REST, Internal ]
+    properties:
+      - type: Documentation
+        url: https://it.vanderbilt.edu/services/catalog/infrastructure/middleware/application_program_interface_services.php
+common:
+  - type: Website
+    url: https://www.vanderbilt.edu/
+  - type: GitHub
+    url: https://github.com/vanderbiltu
+  - type: SourceCode
+    url: https://github.com/heardlibrary
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/vanderbilt-university/
+  - type: DeveloperPortal
+    url: https://apim-portal.app.vanderbilt.edu/
+  - type: Plans
+    url: plans/vanderbilt-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/vanderbilt-rate-limits.yml
+  - type: FinOps
+    url: finops/vanderbilt-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

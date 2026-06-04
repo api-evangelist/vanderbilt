@@ -1,0 +1,44 @@
+---
+name: Vanderbilt University
+description: Vanderbilt University public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/vanderbilt/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      Verified Vanderbilt's public footprint live with no-fabrication
+      discipline. The official VUIT API Services catalog page and the Azure API
+      Management developer portal both exist by reference, but the APIM portal
+      endpoint does not resolve externally (network/VPN-gated, internal use).
+      The official GitHub org (vanderbiltu) is real but has zero public repos.
+      The Heard Libraries GitHub org is active with open linked-data and
+      institutional-repository code, and the library runs Ex Libris Alma/Primo
+      (OAI-PMH capable), but no Vanderbilt-specific public API documentation was
+      confirmed. No official self-service, publicly documented API found.
+    endpoints:
+      - url: https://www.vanderbilt.edu/
+        status: 200
+        note: Official university website resolves.
+      - url: https://it.vanderbilt.edu/services/catalog/infrastructure/middleware/application_program_interface_services.php
+        status: 500
+        note: VUIT API Services catalog page; intermittent 500 on fetch, content confirmed via search. Staff/faculty integration consulting, not public API.
+      - url: https://apim-portal.app.vanderbilt.edu/
+        status: 0
+        note: Azure API Management developer portal does not resolve externally; appears internal/network-gated.
+      - url: https://github.com/vanderbiltu
+        status: 200
+        note: Official Vanderbilt GitHub org; zero public repositories.
+      - url: https://github.com/heardlibrary
+        status: 200
+        note: Heard Libraries GitHub org; open linked-data, semantic-web, and institutional-repository tooling.
+      - url: https://github.com/vanderbilt-data-science
+        status: 200
+        note: Vanderbilt Data Science Institute GitHub org; open-source data science code.
+      - url: https://catalog.library.vanderbilt.edu/
+        status: 200
+        note: Library Primo/Alma discovery catalog (Ex Libris); supports standard OAI-PMH/discovery APIs but no VU-specific public API docs confirmed.
+      - url: https://www.linkedin.com/school/vanderbilt-university/
+        status: 999
+        note: LinkedIn school page exists; 999 is LinkedIn anti-bot response, not a real failure.
