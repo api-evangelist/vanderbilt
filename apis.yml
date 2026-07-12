@@ -55,6 +55,8 @@ apis:
       - type: Documentation
         url: https://it.vanderbilt.edu/services/catalog/infrastructure/middleware/application_program_interface_services.php
 common:
+  - type: DomainSecurity
+    url: security/vanderbilt-domain-security.yml
   - type: Website
     url: https://www.vanderbilt.edu/
   - type: GitHub
