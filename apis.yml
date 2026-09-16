@@ -69,229 +69,273 @@ created: '2026-06-03'
 modified: '2026-09-01'
 specificationVersion: '0.23'
 apis:
-  - aid: vanderbilt:television-news-archive
-    name: Vanderbilt Television News Archive API
-    description: >-
-      Public read API behind tvnews.vanderbilt.edu, self-identifying as the "TVNA Serverless
-      API" v1.0.0. Search, browse and retrieve United States network television news
-      broadcasts and segments recorded continuously since 5 August 1968 — 98,371 broadcasts,
-      969,224 news segments, 396,720 commercial segments, 58,517 hours of runtime. Every read
-      operation probed returned 200 with no credential. Built and operated by the Jean and
-      Alexander Heard Libraries; the source repository is HeardLibrary/TVNA-serverless-api.
-      Vanderbilt publishes no OpenAPI for it, so the contract here is derived from live probes
-      and is marked as such.
-    x-operator: institution
-    humanURL: https://tvnews.vanderbilt.edu/
-    baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
-    tags:
-      - Television News
-      - Digital Collections
-      - Search
-      - Media Archive
-      - Open Access
-    properties:
-      - type: OpenAPI
-        url: openapi/vanderbilt-television-news-archive-openapi.yml
-      - type: JSONSchema
-        url: json-schema/vanderbilt-television-news-archive-schema.json
-      - type: Documentation
-        url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
-      - type: Website
-        url: https://tvnews.vanderbilt.edu/
-  - aid: vanderbilt:sparql
-    name: Vanderbilt Libraries SPARQL Endpoint
-    description: >-
-      Public, unauthenticated SPARQL 1.1 Protocol endpoint on Vanderbilt's own domain,
-      operated by the Heard Libraries' Linked Data, Wikidata and Semantic Web working groups.
-      Holds 14,366,116 triples across named graphs covering Bioimages, the Apulian vase
-      collection, Syriaca.org, SPEAR, Architectura Sinica, TDWG vocabularies and Getty AAT
-      extracts. Query-via-GET and query-via-POST bindings both verified returning
-      application/sparql-results+json.
-    x-operator: institution
-    humanURL: https://sparql.vanderbilt.edu/sparql
-    baseURL: https://sparql.vanderbilt.edu
-    tags:
-      - Linked Data
-      - SPARQL
-      - RDF
-      - Semantic Web
-      - Digital Scholarship
-    properties:
-      - type: OpenAPI
-        url: openapi/vanderbilt-sparql-openapi.yml
-      - type: Vocabulary
-        url: vocabulary/vanderbilt-linked-data-vocabulary.yml
-      - type: SourceCode
-        url: https://github.com/HeardLibrary/linked-data
-  - aid: vanderbilt:institutional-repository
-    name: Vanderbilt Institutional Repository (VUIR)
-    description: >-
-      Self-hosted DSpace 9.1 institutional repository on Vanderbilt's own domain and
-      infrastructure. The HAL REST API root at irbe.library.vanderbilt.edu/server/api
-      advertises 80 link relations and reports dspaceName "Vanderbilt Institutional
-      Repository"; anonymous read is open. The deployment, the content, the handle prefix
-      1803 and the administrative contact are all Vanderbilt's. The DSpace product contract
-      itself is generic to every DSpace deployment and is deliberately NOT saved here — it
-      belongs to the DSpace project, not to Vanderbilt.
-    x-operator: institution
-    humanURL: https://ir.vanderbilt.edu/
-    baseURL: https://irbe.library.vanderbilt.edu/server/api
-    tags:
-      - Institutional Repository
-      - Research Data
-      - DSpace
-      - Open Access
-      - Scholarly Communication
-    properties:
-      - type: Website
-        url: https://ir.vanderbilt.edu/
-      - type: APIReference
-        url: https://irbe.library.vanderbilt.edu/server/api
-      - type: SourceCode
-        url: https://github.com/HeardLibrary/vu-ir
-  - aid: vanderbilt:institutional-repository-oai-pmh
-    name: Vanderbilt Institutional Repository OAI-PMH
-    description: >-
-      OAI-PMH 2.0 harvesting endpoint for the Vanderbilt Institutional Repository. Identify
-      returns repositoryName "Vanderbilt Institutional Repository", repositoryIdentifier
-      ir.vanderbilt.edu and adminEmail dale.poulter@vanderbilt.edu — an institution-operated
-      endpoint, on an institution host, with an institution contact. This is one of the two
-      education-regime domain standards Vanderbilt actually conforms to with evidence.
-    x-operator: institution
-    humanURL: https://irbe.library.vanderbilt.edu/server/oai/request?verb=Identify
-    baseURL: https://irbe.library.vanderbilt.edu/server/oai/request
-    tags:
-      - OAI-PMH
-      - Metadata Harvesting
-      - Institutional Repository
-      - Open Access
-    properties:
-      - type: APIReference
-        url: https://irbe.library.vanderbilt.edu/server/oai/request?verb=Identify
-      - type: Conformance
-        url: conformance/vanderbilt-education-standards-conformance.yml
-  - aid: vanderbilt:onevu-identity
-    name: Vanderbilt Okta Identity Provider (OneVU)
-    description: >-
-      Vanderbilt's Okta organisation on its own custom domain onevu.vanderbilt.edu
-      (CNAME to vanderbilt.customdomains.okta.com). Publishes a live OpenID Connect discovery
-      document and SAML 2.0 IdP metadata. The platform is Okta's; the identity provider, the
-      accounts and the domain are Vanderbilt's — recorded as a federation surface, which is
-      what the institution actually operates here.
-    x-operator: federation
-    humanURL: https://onevu.vanderbilt.edu/.well-known/openid-configuration
-    baseURL: https://onevu.vanderbilt.edu
-    tags:
-      - Identity Federation
-      - OpenID Connect
-      - SAML
-      - OAuth
-      - Single Sign-On
-    properties:
-      - type: Discovery
-        url: https://onevu.vanderbilt.edu/.well-known/openid-configuration
-      - type: Authentication
-        url: authentication/vanderbilt-authentication.yml
-      - type: Scopes
-        url: scopes/vanderbilt-scopes.yml
-  - aid: vanderbilt:entra-identity
-    name: Vanderbilt Microsoft Entra ID Tenant
-    description: >-
-      The vanderbilt.edu Microsoft Entra ID tenant
-      (ba5a7f39-e3be-4ab3-b450-67fa80faecad), publishing live OpenID Connect discovery and
-      SAML 2.0 / WS-Federation metadata. A federation surface: shared platform, Vanderbilt's
-      own directory and entity behind it.
-    x-operator: federation
-    humanURL: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
-    baseURL: https://login.microsoftonline.com/ba5a7f39-e3be-4ab3-b450-67fa80faecad
-    tags:
-      - Identity Federation
-      - OpenID Connect
-      - SAML
-      - Entra ID
-      - Single Sign-On
-    properties:
-      - type: Discovery
-        url: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
-      - type: Authentication
-        url: authentication/vanderbilt-authentication.yml
-  - aid: vanderbilt:shibboleth-service-provider
-    name: VUIR Shibboleth Service Provider
-    description: >-
-      SAML 2.0 Service Provider metadata for the Vanderbilt Institutional Repository,
-      entityID https://ir.vanderbilt.edu/shibboleth, served live from the repository host.
-      The DiscoFeed names the Okta IdP it trusts. Note the document carries Shibboleth's
-      stock "example metadata only" header, so it is auto-generated SP metadata rather than
-      a curated federation registration — recorded honestly as such.
-    x-operator: institution
-    humanURL: https://irbe.library.vanderbilt.edu/Shibboleth.sso/Metadata
-    baseURL: https://irbe.library.vanderbilt.edu/Shibboleth.sso
-    tags:
-      - Shibboleth
-      - SAML
-      - Identity Federation
-      - Institutional Repository
-    properties:
-      - type: Conformance
-        url: conformance/vanderbilt-education-standards-conformance.yml
-  - aid: vanderbilt:primo-discovery
-    name: Ex Libris Primo / Alma Library Discovery (01VAN_INST)
-    description: >-
-      Vanderbilt's library discovery layer runs on Ex Libris Primo VE with the institution
-      code 01VAN_INST and view vanui. catalog.library.vanderbilt.edu is a CNAME to
-      vanderbilt.primo.exlibrisgroup.com, so the platform, the software and the contract are
-      Ex Libris'. Vanderbilt's tenancy is real and is recorded here; the vendor's API
-      contract is not saved under this institution. The Alma OAI endpoint for 01VAN_INST
-      returned 403 — live but not open.
-    x-operator: tenant
-    humanURL: https://catalog.library.vanderbilt.edu/
-    baseURL: https://vanderbilt.primo.exlibrisgroup.com
-    tags:
-      - Library
-      - Discovery
-      - Ex Libris
-      - Primo
-      - Alma
-      - Vendor Tenancy
-    properties:
-      - type: Website
-        url: https://catalog.library.vanderbilt.edu/
-  - aid: vanderbilt:crossref-member
-    name: Crossref Membership — Vanderbilt University Library
-    description: >-
-      Vanderbilt University Library is Crossref member 6384, DOI prefix 10.15695, with 2,375
-      DOIs registered (164 current, 2,211 backfile) as of 2026-09-01. A registry membership:
-      a fact about the institution, recorded as such. Crossref's own API contract is not
-      saved here.
-    x-operator: registry
-    humanURL: https://api.crossref.org/members/6384
-    baseURL: https://api.crossref.org
-    tags:
-      - Crossref
-      - DOI
-      - Registry
-      - Scholarly Communication
-    properties:
-      - type: APIReference
-        url: https://api.crossref.org/members/6384
-  - aid: vanderbilt:ror
-    name: ROR Registration — Vanderbilt University
-    description: >-
-      Vanderbilt University is registered in the Research Organization Registry as
-      https://ror.org/02vm5rt34. Distinct from Vanderbilt University Medical Center
-      (05dq2gs74), Vanderbilt Health (05grhsk96) and the Vanderbilt-Ingram Cancer Center
-      (02rjj2m04), which are separate ROR entities and are deliberately not folded into this
-      profile.
-    x-operator: registry
-    humanURL: https://ror.org/02vm5rt34
-    baseURL: https://api.ror.org
-    tags:
-      - ROR
-      - Registry
-      - Research Identifiers
-    properties:
-      - type: APIReference
-        url: https://api.ror.org/v2/organizations/02vm5rt34
+- aid: vanderbilt:institutional-repository
+  name: Vanderbilt Institutional Repository (VUIR)
+  description: >-
+    Self-hosted DSpace 9.1 institutional repository on Vanderbilt's own domain and infrastructure. The
+    HAL REST API root at irbe.library.vanderbilt.edu/server/api advertises 80 link relations and reports
+    dspaceName "Vanderbilt Institutional Repository"; anonymous read is open. The deployment, the content,
+    the handle prefix 1803 and the administrative contact are all Vanderbilt's. The DSpace product contract
+    itself is generic to every DSpace deployment and is deliberately NOT saved here — it belongs to the
+    DSpace project, not to Vanderbilt.
+  x-operator: institution
+  humanURL: https://ir.vanderbilt.edu/
+  baseURL: https://irbe.library.vanderbilt.edu/server/api
+  tags:
+  - Institutional Repository
+  - Research Data
+  - DSpace
+  - Open Access
+  - Scholarly Communication
+  properties:
+  - type: Website
+    url: https://ir.vanderbilt.edu/
+  - type: APIReference
+    url: https://irbe.library.vanderbilt.edu/server/api
+  - type: SourceCode
+    url: https://github.com/HeardLibrary/vu-ir
+- aid: vanderbilt:institutional-repository-oai-pmh
+  name: Vanderbilt Institutional Repository OAI-PMH
+  description: >-
+    OAI-PMH 2.0 harvesting endpoint for the Vanderbilt Institutional Repository. Identify returns repositoryName
+    "Vanderbilt Institutional Repository", repositoryIdentifier ir.vanderbilt.edu and adminEmail dale.poulter@vanderbilt.edu
+    — an institution-operated endpoint, on an institution host, with an institution contact. This is one
+    of the two education-regime domain standards Vanderbilt actually conforms to with evidence.
+  x-operator: institution
+  humanURL: https://irbe.library.vanderbilt.edu/server/oai/request?verb=Identify
+  baseURL: https://irbe.library.vanderbilt.edu/server/oai/request
+  tags:
+  - OAI-PMH
+  - Metadata Harvesting
+  - Institutional Repository
+  - Open Access
+  properties:
+  - type: APIReference
+    url: https://irbe.library.vanderbilt.edu/server/oai/request?verb=Identify
+  - type: Conformance
+    url: conformance/vanderbilt-education-standards-conformance.yml
+- aid: vanderbilt:onevu-identity
+  name: Vanderbilt Okta Identity Provider (OneVU)
+  description: >-
+    Vanderbilt's Okta organisation on its own custom domain onevu.vanderbilt.edu (CNAME to vanderbilt.customdomains.okta.com).
+    Publishes a live OpenID Connect discovery document and SAML 2.0 IdP metadata. The platform is Okta's;
+    the identity provider, the accounts and the domain are Vanderbilt's — recorded as a federation surface,
+    which is what the institution actually operates here.
+  x-operator: federation
+  humanURL: https://onevu.vanderbilt.edu/.well-known/openid-configuration
+  baseURL: https://onevu.vanderbilt.edu
+  tags:
+  - Identity Federation
+  - OpenID Connect
+  - SAML
+  - Authentication
+  - Single Sign-On
+  tags_raw:
+  - Identity Federation
+  - OpenID Connect
+  - SAML
+  - OAuth
+  - Single Sign-On
+  properties:
+  - type: Discovery
+    url: https://onevu.vanderbilt.edu/.well-known/openid-configuration
+  - type: Authentication
+    url: authentication/vanderbilt-authentication.yml
+  - type: Scopes
+    url: scopes/vanderbilt-scopes.yml
+- aid: vanderbilt:entra-identity
+  name: Vanderbilt Microsoft Entra ID Tenant
+  description: >-
+    The vanderbilt.edu Microsoft Entra ID tenant (ba5a7f39-e3be-4ab3-b450-67fa80faecad), publishing live
+    OpenID Connect discovery and SAML 2.0 / WS-Federation metadata. A federation surface: shared platform,
+    Vanderbilt's own directory and entity behind it.
+  x-operator: federation
+  humanURL: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
+  baseURL: https://login.microsoftonline.com/ba5a7f39-e3be-4ab3-b450-67fa80faecad
+  tags:
+  - Identity Federation
+  - OpenID Connect
+  - SAML
+  - Entra ID
+  - Single Sign-On
+  properties:
+  - type: Discovery
+    url: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
+  - type: Authentication
+    url: authentication/vanderbilt-authentication.yml
+- aid: vanderbilt:shibboleth-service-provider
+  name: VUIR Shibboleth Service Provider
+  description: >-
+    SAML 2.0 Service Provider metadata for the Vanderbilt Institutional Repository, entityID https://ir.vanderbilt.edu/shibboleth,
+    served live from the repository host. The DiscoFeed names the Okta IdP it trusts. Note the document
+    carries Shibboleth's stock "example metadata only" header, so it is auto-generated SP metadata rather
+    than a curated federation registration — recorded honestly as such.
+  x-operator: institution
+  humanURL: https://irbe.library.vanderbilt.edu/Shibboleth.sso/Metadata
+  baseURL: https://irbe.library.vanderbilt.edu/Shibboleth.sso
+  tags:
+  - Shibboleth
+  - SAML
+  - Identity Federation
+  - Institutional Repository
+  properties:
+  - type: Conformance
+    url: conformance/vanderbilt-education-standards-conformance.yml
+- aid: vanderbilt:primo-discovery
+  name: Ex Libris Primo / Alma Library Discovery (01VAN_INST)
+  description: >-
+    Vanderbilt's library discovery layer runs on Ex Libris Primo VE with the institution code 01VAN_INST
+    and view vanui. catalog.library.vanderbilt.edu is a CNAME to vanderbilt.primo.exlibrisgroup.com, so
+    the platform, the software and the contract are Ex Libris'. Vanderbilt's tenancy is real and is recorded
+    here; the vendor's API contract is not saved under this institution. The Alma OAI endpoint for 01VAN_INST
+    returned 403 — live but not open.
+  x-operator: tenant
+  humanURL: https://catalog.library.vanderbilt.edu/
+  baseURL: https://vanderbilt.primo.exlibrisgroup.com
+  tags:
+  - Library
+  - Discovery
+  - Ex Libris
+  - Primo
+  - Alma
+  - Vendor Tenancy
+  properties:
+  - type: Website
+    url: https://catalog.library.vanderbilt.edu/
+- aid: vanderbilt:crossref-member
+  name: Crossref Membership — Vanderbilt University Library
+  description: >-
+    Vanderbilt University Library is Crossref member 6384, DOI prefix 10.15695, with 2,375 DOIs registered
+    (164 current, 2,211 backfile) as of 2026-09-01. A registry membership: a fact about the institution,
+    recorded as such. Crossref's own API contract is not saved here.
+  x-operator: registry
+  humanURL: https://api.crossref.org/members/6384
+  baseURL: https://api.crossref.org
+  tags:
+  - Crossref
+  - DOI
+  - Registry
+  - Scholarly Communication
+  properties:
+  - type: APIReference
+    url: https://api.crossref.org/members/6384
+- aid: vanderbilt:ror
+  name: ROR Registration — Vanderbilt University
+  description: >-
+    Vanderbilt University is registered in the Research Organization Registry as https://ror.org/02vm5rt34.
+    Distinct from Vanderbilt University Medical Center (05dq2gs74), Vanderbilt Health (05grhsk96) and
+    the Vanderbilt-Ingram Cancer Center (02rjj2m04), which are separate ROR entities and are deliberately
+    not folded into this profile.
+  x-operator: registry
+  humanURL: https://ror.org/02vm5rt34
+  baseURL: https://api.ror.org
+  tags:
+  - ROR
+  - Registry
+  - Research Identifiers
+  properties:
+  - type: APIReference
+    url: https://api.ror.org/v2/organizations/02vm5rt34
+- aid: vanderbilt:vanderbilt-broadcasts-api
+  name: Vanderbilt University Broadcasts API
+  description: Broadcast and segment records in the archive.
+  humanURL: https://tvnews.vanderbilt.edu/
+  baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  tags:
+  - Broadcasts
+  properties:
+  - type: OpenAPI
+    url: openapi/vanderbilt-broadcasts-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/vanderbilt-television-news-archive-schema.json
+  - type: Documentation
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+  - type: Website
+    url: https://tvnews.vanderbilt.edu/
+  - type: Vocabulary
+    url: vocabulary/vanderbilt-linked-data-vocabulary.yml
+  - type: SourceCode
+    url: https://github.com/HeardLibrary/linked-data
+- aid: vanderbilt:vanderbilt-metadata-api
+  name: Vanderbilt University Metadata API
+  description: Controlled vocabularies used to filter the archive.
+  humanURL: https://tvnews.vanderbilt.edu/
+  baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  tags:
+  - Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/vanderbilt-metadata-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/vanderbilt-television-news-archive-schema.json
+  - type: Documentation
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+  - type: Website
+    url: https://tvnews.vanderbilt.edu/
+  - type: Vocabulary
+    url: vocabulary/vanderbilt-linked-data-vocabulary.yml
+  - type: SourceCode
+    url: https://github.com/HeardLibrary/linked-data
+- aid: vanderbilt:vanderbilt-search-api
+  name: Vanderbilt University Search API
+  description: Keyword and faceted search over broadcast segments.
+  humanURL: https://tvnews.vanderbilt.edu/
+  baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/vanderbilt-search-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/vanderbilt-television-news-archive-schema.json
+  - type: Documentation
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+  - type: Website
+    url: https://tvnews.vanderbilt.edu/
+  - type: Vocabulary
+    url: vocabulary/vanderbilt-linked-data-vocabulary.yml
+  - type: SourceCode
+    url: https://github.com/HeardLibrary/linked-data
+- aid: vanderbilt:vanderbilt-service-api
+  name: Vanderbilt University Service API
+  description: Service identification.
+  humanURL: https://tvnews.vanderbilt.edu/
+  baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  tags:
+  - Service
+  properties:
+  - type: OpenAPI
+    url: openapi/vanderbilt-service-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/vanderbilt-television-news-archive-schema.json
+  - type: Documentation
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+  - type: Website
+    url: https://tvnews.vanderbilt.edu/
+  - type: Vocabulary
+    url: vocabulary/vanderbilt-linked-data-vocabulary.yml
+  - type: SourceCode
+    url: https://github.com/HeardLibrary/linked-data
+- aid: vanderbilt:vanderbilt-sparql-api
+  name: Vanderbilt University SPARQL API
+  description: SPARQL 1.1 query operations.
+  humanURL: https://tvnews.vanderbilt.edu/
+  baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  tags:
+  - SPARQL
+  properties:
+  - type: OpenAPI
+    url: openapi/vanderbilt-sparql-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/vanderbilt-television-news-archive-schema.json
+  - type: Documentation
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+  - type: Website
+    url: https://tvnews.vanderbilt.edu/
+  - type: Vocabulary
+    url: vocabulary/vanderbilt-linked-data-vocabulary.yml
+  - type: SourceCode
+    url: https://github.com/HeardLibrary/linked-data
 common:
   - type: Website
     url: https://www.vanderbilt.edu/
