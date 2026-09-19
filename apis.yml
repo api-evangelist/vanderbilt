@@ -129,7 +129,7 @@ apis:
   - OpenID Connect
   - SAML
   - Authentication
-  - Single Sign-On
+  - SSO
   tags_raw:
   - Identity Federation
   - OpenID Connect
@@ -153,6 +153,12 @@ apis:
   humanURL: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
   baseURL: https://login.microsoftonline.com/ba5a7f39-e3be-4ab3-b450-67fa80faecad
   tags:
+  - Identity Federation
+  - OpenID Connect
+  - SAML
+  - Entra ID
+  - SSO
+  tags_raw:
   - Identity Federation
   - OpenID Connect
   - SAML
@@ -242,6 +248,8 @@ apis:
   humanURL: https://tvnews.vanderbilt.edu/
   baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
   tags:
+  - Broadcast
+  tags_raw:
   - Broadcasts
   properties:
   - type: OpenAPI
@@ -302,6 +310,8 @@ apis:
   humanURL: https://tvnews.vanderbilt.edu/
   baseURL: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
   tags:
+  - Services
+  tags_raw:
   - Service
   properties:
   - type: OpenAPI
