@@ -1,0 +1,85 @@
+---
+name: Vanderbilt University — Authentication
+description: >-
+  How authentication works across Vanderbilt's institution-operated programmable surfaces.
+  The distinguishing fact for this institution is that its three public read APIs need no
+  credential at all, while everything that touches a person's account runs through
+  Vanderbilt's federated identity estate.
+generated: '2026-09-01'
+method: probed
+source: Live unauthenticated HTTP probes on 2026-09-01.
+surfaces:
+  - surface: Vanderbilt Television News Archive API
+    operator: institution
+    base_url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+    public_read: true
+    scheme: none
+    detail: >-
+      Service root, archive totals, date range, metadata filters, broadcast retrieval and
+      keyword search all returned 200 with no Authorization header and no API key.
+      Personalised operations (/requests, /downloads, /streaming, the /auth/* family)
+      require a signed-in session; the application's own error handling raises
+      "Unauthorized: Please log in to continue" on 401. Sign-in is either a local account
+      or federated SSO from a subscribing institution — /auth/sso-providers returns the
+      configured domains.
+    evidence:
+      - { url: 'https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod', status: 200 }
+      - { url: 'https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod/auth/sso-providers', status: 200 }
+  - surface: Vanderbilt Libraries SPARQL endpoint
+    operator: institution
+    base_url: https://sparql.vanderbilt.edu/sparql
+    public_read: true
+    scheme: none
+    detail: Query via GET and via direct POST both returned 200 with no credential.
+    evidence:
+      - { url: 'https://sparql.vanderbilt.edu/sparql', status: 200 }
+  - surface: Vanderbilt Institutional Repository (VUIR) — DSpace REST + OAI-PMH
+    operator: institution
+    base_url: https://irbe.library.vanderbilt.edu/server
+    public_read: true
+    scheme: none for anonymous read; SAML/Shibboleth for authenticated actions
+    detail: >-
+      The HAL root, community listing and the OAI-PMH request endpoint are open. Deposit,
+      workflow and administrative operations authenticate through the DSpace Shibboleth SP
+      (entityID https://ir.vanderbilt.edu/shibboleth), which redirects to Vanderbilt's Okta
+      IdP at onevu.vanderbilt.edu.
+    evidence:
+      - { url: 'https://irbe.library.vanderbilt.edu/server/api', status: 200 }
+      - { url: 'https://irbe.library.vanderbilt.edu/Shibboleth.sso/Metadata', status: 200 }
+      - { url: 'https://irbe.library.vanderbilt.edu/Shibboleth.sso/DiscoFeed', status: 200 }
+identity_providers:
+  - name: Vanderbilt Okta (OneVU)
+    operator: federation
+    host: onevu.vanderbilt.edu
+    platform: Okta (custom domain; CNAME -> vanderbilt.customdomains.okta.com)
+    protocols: [OpenID Connect 1.0, OAuth 2.0, SAML 2.0]
+    discovery: https://onevu.vanderbilt.edu/.well-known/openid-configuration
+    issuer: https://onevu.vanderbilt.edu
+    authorization_endpoint: https://onevu.vanderbilt.edu/oauth2/v1/authorize
+    token_endpoint: https://onevu.vanderbilt.edu/oauth2/v1/token
+    userinfo_endpoint: https://onevu.vanderbilt.edu/oauth2/v1/userinfo
+    jwks_uri: https://onevu.vanderbilt.edu/oauth2/v1/keys
+    registration_endpoint: https://onevu.vanderbilt.edu/oauth2/v1/clients
+    pkce: [S256]
+    token_endpoint_auth_methods:
+      - client_secret_post
+      - client_secret_basic
+      - private_key_jwt
+      - self_signed_tls_client_auth
+    saml_metadata: https://onevu.vanderbilt.edu/app/exk1wcg5n16M91Uyd1d8/sso/saml/metadata
+    saml_entity_id: http://www.okta.com/exk1wcg5n16M91Uyd1d8
+  - name: Vanderbilt Microsoft Entra ID tenant
+    operator: federation
+    domain: vanderbilt.edu
+    tenant_id: ba5a7f39-e3be-4ab3-b450-67fa80faecad
+    protocols: [OpenID Connect 1.0, OAuth 2.0, SAML 2.0, WS-Federation]
+    discovery: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
+    issuer: https://login.microsoftonline.com/ba5a7f39-e3be-4ab3-b450-67fa80faecad/v2.0
+    saml_metadata: https://login.microsoftonline.com/vanderbilt.edu/federationmetadata/2007-06/federationmetadata.xml
+    saml_entity_id: https://sts.windows.net/ba5a7f39-e3be-4ab3-b450-67fa80faecad/
+notes:
+  - >-
+    InCommon MDQ (https://mdq.incommon.org/entities/{entityID}) returned 404 for
+    urn:mace:incommon:vanderbilt.edu, https://ir.vanderbilt.edu/shibboleth,
+    http://www.okta.com/exk1wcg5n16M91Uyd1d8 and four guessed IdP entityIDs. No InCommon
+    registration was confirmed, so none is claimed here.

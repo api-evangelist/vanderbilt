@@ -1,0 +1,146 @@
+openapi: 3.2.0
+info:
+  title: Vanderbilt Television News Archive Search API
+  version: 1.0.0
+  description: Read API for the Vanderbilt Television News Archive, the Jean and Alexander Heard Libraries' collection of United States network television news broadcasts recorded continuously since August 5, 1968.
+  contact:
+    name: Vanderbilt Television News Archive, Jean and Alexander Heard Libraries
+    url: https://tvnews.vanderbilt.edu/
+  license:
+    name: Terms of use published by the Vanderbilt Television News Archive
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+servers:
+- url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  description: Production stage. AWS API Gateway is Vanderbilt's own deployment infrastructure here, not a third-party SaaS product; the endpoint is referenced directly by the tvnews.vanderbilt.edu application bundle.
+tags:
+- name: Search
+  description: Keyword and faceted search over broadcast segments.
+paths:
+  /broadcasts/search/keyword:
+    post:
+      tags:
+      - Search
+      operationId: searchByKeyword
+      summary: Keyword search across segment titles, descriptions and transcripts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - keyword
+              properties:
+                keyword:
+                  type: string
+                page:
+                  type: integer
+                  minimum: 1
+                  default: 1
+                size:
+                  type: integer
+                  minimum: 1
+                  default: 20
+      responses:
+        '200':
+          description: Paged segment hits.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentSearchResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /broadcasts/search:
+    post:
+      tags:
+      - Search
+      operationId: searchBroadcasts
+      summary: Faceted search over broadcasts and segments
+      description: Faceted search accepting the filter vocabularies returned by /search/metadata/filters. Observed to exceed the API Gateway 29-second integration timeout on broad queries; see errors/vanderbilt-errors.yml.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                page:
+                  type: integer
+                  minimum: 1
+                  default: 1
+                size:
+                  type: integer
+                  minimum: 1
+                  default: 20
+      responses:
+        '200':
+          description: Paged results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentSearchResult'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+components:
+  schemas:
+    SegmentSearchResult:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentSummary'
+        total:
+          type: integer
+          description: Observed as -1 on the keyword endpoint, which does not compute an exact total; treat a negative value as "unknown".
+        page:
+          type: integer
+        size:
+          type: integer
+        keyword:
+          type: string
+    SegmentSummary:
+      type: object
+      properties:
+        segment_id:
+          type: string
+        segment_title:
+          type: string
+        network:
+          type: integer
+          description: Network id from MetadataFilters.networks.
+        broadcast_date:
+          type: string
+          format: date
+        broadcast_id:
+          type: string
+        segment_duration:
+          type: integer
+          description: Seconds.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+  responses:
+    GatewayTimeout:
+      description: Upstream integration exceeded the gateway timeout.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: Endpoint request timed out
+    Unauthorized:
+      description: Sign-in required for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+x-provenance:
+  generated: '2026-09-01'
+  method: derived
+  source: Derived from live unauthenticated probes of https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod on 2026-09-01, plus the endpoint inventory read out of the tvnews.vanderbilt.edu application bundle /assets/index-PmeD9ur1.js. Vanderbilt publishes no OpenAPI for this API.
+  x-operator: institution

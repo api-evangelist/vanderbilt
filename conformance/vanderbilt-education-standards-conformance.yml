@@ -1,0 +1,144 @@
+---
+name: Vanderbilt University — Education Regime Domain Standard Conformance
+description: >-
+  Conformance of Vanderbilt University's institution-operated surfaces against the Kin Score
+  `education` regulatory regime standards list (scim, lti, oneroster, ed-fi, caliper, qti,
+  oai-pmh, shibboleth, saml, orcid, datacite, crossref). Reward-only: every entry below was
+  probed live and carries the exact URL and observed response that evidences it. Standards
+  with no evidence are recorded as not_found, not as failures.
+generated: '2026-09-01'
+method: probed
+source: Live probes of Vanderbilt-operated hosts on 2026-09-01.
+conformance:
+  - standard: oai-pmh
+    status: conformant
+    operator: institution
+    surface: Vanderbilt Institutional Repository (VUIR)
+    evidence:
+      url: https://irbe.library.vanderbilt.edu/server/oai/request?verb=Identify
+      status: 200
+      content_type: text/xml;charset=UTF-8
+      detail: >-
+        OAI-PMH 2.0 Identify response. repositoryName "Vanderbilt Institutional Repository",
+        baseURL https://irbe.library.vanderbilt.edu/server/oai/request, protocolVersion 2.0,
+        adminEmail dale.poulter@vanderbilt.edu, repositoryIdentifier ir.vanderbilt.edu,
+        granularity YYYY-MM-DDThh:mm:ssZ, earliestDatestamp 2026-04-27T17:09:30Z.
+        The admin contact and the repository identifier are both Vanderbilt's, so the
+        endpoint is institution-operated even though the software is DSpace 9.1.
+  - standard: shibboleth
+    status: conformant
+    operator: institution
+    surface: VUIR Shibboleth Service Provider
+    evidence:
+      url: https://irbe.library.vanderbilt.edu/Shibboleth.sso/Metadata
+      status: 200
+      detail: >-
+        Live Shibboleth SP metadata, entityID https://ir.vanderbilt.edu/shibboleth.
+        /Shibboleth.sso/DiscoFeed returns the configured IdP
+        (http://www.okta.com/exk1wcg5n16M91Uyd1d8) and /Shibboleth.sso/Login 302s to
+        https://onevu.vanderbilt.edu/app/vanderbilt_dspacevuirprod_2/.../sso/saml.
+        Note the served document carries Shibboleth's stock "example metadata only"
+        header comment, so it is auto-generated SP metadata rather than a curated
+        federation registration.
+  - standard: saml
+    status: conformant
+    operator: federation
+    surface: Vanderbilt identity providers
+    evidence:
+      - url: https://onevu.vanderbilt.edu/app/exk1wcg5n16M91Uyd1d8/sso/saml/metadata
+        status: 200
+        content_type: application/samlmetadata+xml
+        detail: >-
+          SAML 2.0 IDPSSODescriptor, entityID http://www.okta.com/exk1wcg5n16M91Uyd1d8,
+          served from Vanderbilt's own Okta custom domain onevu.vanderbilt.edu
+          (CNAME -> vanderbilt.customdomains.okta.com).
+      - url: https://login.microsoftonline.com/vanderbilt.edu/federationmetadata/2007-06/federationmetadata.xml
+        status: 200
+        content_type: text/xml
+        detail: >-
+          SAML 2.0 federation metadata for the vanderbilt.edu Microsoft Entra ID tenant,
+          entityID https://sts.windows.net/ba5a7f39-e3be-4ab3-b450-67fa80faecad/.
+  - standard: crossref
+    status: conformant
+    operator: registry
+    surface: Crossref membership
+    evidence:
+      url: https://api.crossref.org/members/6384
+      status: 200
+      detail: >-
+        Crossref member 6384, primary-name "Vanderbilt University Library", DOI prefix
+        10.15695, 2,375 DOIs registered (164 current, 2,211 backfile) as of the probe date.
+  - standard: datacite
+    status: not_found
+    operator: registry
+    surface: DataCite
+    evidence:
+      - url: https://api.datacite.org/providers?query=vanderbilt
+        status: 200
+        detail: meta.total = 0 — no DataCite provider (member) record matches Vanderbilt.
+      - url: https://api.datacite.org/clients?query=vanderbilt
+        status: 200
+        detail: meta.total = 0 — no DataCite repository (client) record matches Vanderbilt.
+  - standard: orcid
+    status: not_found
+    operator: registry
+    detail: >-
+      No institution-operated ORCID surface was found. The Heard Libraries' linked-data
+      repository contains scripts that CONSUME the ORCID public API
+      (github.com/HeardLibrary/linked-data, publications/orcid), which is consumption, not
+      an ORCID membership surface Vanderbilt operates. Not credited.
+  - standard: scim
+    status: not_found
+    detail: >-
+      onevu.vanderbilt.edu is an Okta org and Okta implements SCIM 2.0, but no Vanderbilt
+      SCIM endpoint was reachable unauthenticated and no public documentation of one was
+      found. Not credited without evidence.
+  - standard: lti
+    status: not_found
+    detail: No public LTI platform or tool registration surface found on a Vanderbilt host.
+  - standard: oneroster
+    status: not_found
+    detail: No public OneRoster endpoint found.
+  - standard: ed-fi
+    status: not_found
+    detail: Ed-Fi is a K-12 data standard; not applicable to this institution and not found.
+  - standard: caliper
+    status: not_found
+    detail: No public Caliper Analytics endpoint found.
+  - standard: qti
+    status: not_found
+    detail: No public QTI surface found.
+other_standards_observed:
+  - standard: sparql-1.1-protocol
+    status: conformant
+    operator: institution
+    evidence:
+      url: https://sparql.vanderbilt.edu/sparql
+      status: 200
+      detail: >-
+        W3C SPARQL 1.1 Protocol. Query-via-GET and query-via-POST-directly bindings both
+        return 200 with application/sparql-results+json (SPARQL 1.1 Query Results JSON
+        Format). 14,366,116 triples reported by SELECT (COUNT(*)).
+  - standard: openid-connect-discovery-1.0
+    status: conformant
+    operator: federation
+    evidence:
+      - url: https://onevu.vanderbilt.edu/.well-known/openid-configuration
+        status: 200
+        detail: >-
+          issuer https://onevu.vanderbilt.edu; scopes openid, email, profile, address,
+          phone, offline_access, groups; PKCE S256 supported.
+      - url: https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration
+        status: 200
+        detail: issuer https://login.microsoftonline.com/ba5a7f39-e3be-4ab3-b450-67fa80faecad/v2.0
+  - standard: dspace-rest-hal
+    status: conformant
+    operator: institution
+    evidence:
+      url: https://irbe.library.vanderbilt.edu/server/api
+      status: 200
+      content_type: application/hal+json
+      detail: >-
+        DSpace 9.1 HAL root, dspaceName "Vanderbilt Institutional Repository", 80 link
+        relations advertised. The DEPLOYMENT is Vanderbilt's; the CONTRACT is DSpace's
+        generic product contract and is deliberately NOT saved into this repository.

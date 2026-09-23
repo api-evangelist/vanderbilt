@@ -1,0 +1,72 @@
+openapi: 3.2.0
+info:
+  title: Vanderbilt Television News Archive Service API
+  version: 1.0.0
+  description: Read API for the Vanderbilt Television News Archive, the Jean and Alexander Heard Libraries' collection of United States network television news broadcasts recorded continuously since August 5, 1968.
+  contact:
+    name: Vanderbilt Television News Archive, Jean and Alexander Heard Libraries
+    url: https://tvnews.vanderbilt.edu/
+  license:
+    name: Terms of use published by the Vanderbilt Television News Archive
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+servers:
+- url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  description: Production stage. AWS API Gateway is Vanderbilt's own deployment infrastructure here, not a third-party SaaS product; the endpoint is referenced directly by the tvnews.vanderbilt.edu application bundle.
+tags:
+- name: Service
+  description: Service identification.
+paths:
+  /:
+    get:
+      tags:
+      - Service
+      operationId: getServiceRoot
+      summary: Service identification
+      description: Returns the service name, version and deployment stage.
+      responses:
+        '200':
+          description: Service banner.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  version:
+                    type: string
+                  stage:
+                    type: string
+              example:
+                message: Welcome to the TVNA Serverless API
+                version: 1.0.0
+                stage: prod
+  /auth/sso-providers:
+    get:
+      tags:
+      - Service
+      operationId: listSsoProviders
+      summary: Subscribing institutions with federated sign-in configured
+      description: Lists the email domains and identity-provider names of subscribing institutions whose users can sign in through their home institution rather than a local account.
+      responses:
+        '200':
+          description: Configured SSO domains.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        domain:
+                          type: string
+                        identity_provider_name:
+                          type: string
+x-provenance:
+  generated: '2026-09-01'
+  method: derived
+  source: Derived from live unauthenticated probes of https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod on 2026-09-01, plus the endpoint inventory read out of the tvnews.vanderbilt.edu application bundle /assets/index-PmeD9ur1.js. Vanderbilt publishes no OpenAPI for this API.
+  x-operator: institution

@@ -1,0 +1,33 @@
+{
+  "provider": "vanderbilt",
+  "sources": [
+    "_original/vanderbilt-sparql-openapi.yml",
+    "_original/vanderbilt-television-news-archive-openapi.yml"
+  ],
+  "outputs": [
+    "vanderbilt-sparql-api-openapi.yml",
+    "vanderbilt-broadcasts-api-openapi.yml",
+    "vanderbilt-metadata-api-openapi.yml",
+    "vanderbilt-search-api-openapi.yml",
+    "vanderbilt-service-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "2 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "vanderbilt-sparql-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "vanderbilt-television-news-archive-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/vanderbilt-television-news-archive-openapi_2.yml: archived document superseded by a larger archived document",
+    "_original/vanderbilt-sparql-openapi_2.yml: archived document superseded by a larger archived document",
+    "vanderbilt-broadcasts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vanderbilt-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vanderbilt-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vanderbilt-service-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "vanderbilt-sparql-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

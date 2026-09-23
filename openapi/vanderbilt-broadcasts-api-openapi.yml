@@ -1,0 +1,206 @@
+openapi: 3.2.0
+info:
+  title: Vanderbilt Television News Archive Broadcasts API
+  version: 1.0.0
+  description: Read API for the Vanderbilt Television News Archive, the Jean and Alexander Heard Libraries' collection of United States network television news broadcasts recorded continuously since August 5, 1968.
+  contact:
+    name: Vanderbilt Television News Archive, Jean and Alexander Heard Libraries
+    url: https://tvnews.vanderbilt.edu/
+  license:
+    name: Terms of use published by the Vanderbilt Television News Archive
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+servers:
+- url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+  description: Production stage. AWS API Gateway is Vanderbilt's own deployment infrastructure here, not a third-party SaaS product; the endpoint is referenced directly by the tvnews.vanderbilt.edu application bundle.
+tags:
+- name: Broadcasts
+  description: Broadcast and segment records in the archive.
+paths:
+  /broadcasts:
+    get:
+      tags:
+      - Broadcasts
+      operationId: getArchiveTotals
+      summary: Archive-wide counts
+      description: Aggregate counts for the whole archive and total runtime in hours.
+      responses:
+        '200':
+          description: Collection totals.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveTotals'
+  /broadcasts/full-date-range:
+    get:
+      tags:
+      - Broadcasts
+      operationId: getFullDateRange
+      summary: Earliest and latest broadcast dates held
+      responses:
+        '200':
+          description: Inclusive date range of the collection.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start_date:
+                    type: string
+                    format: date
+                  end_date:
+                    type: string
+                    format: date
+                example:
+                  start_date: '1968-08-05'
+                  end_date: '2026-07-31'
+  /broadcasts/calendar:
+    get:
+      tags:
+      - Broadcasts
+      operationId: getBroadcastCalendar
+      summary: Broadcasts available within a date window
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: Inclusive start of the window, YYYY-MM-DD.
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: false
+        description: Inclusive end of the window, YYYY-MM-DD.
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Calendar of broadcasts in the window.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /broadcasts/{broadcastId}:
+    get:
+      tags:
+      - Broadcasts
+      operationId: getBroadcast
+      summary: Retrieve one broadcast and its segments
+      parameters:
+      - name: broadcastId
+        in: path
+        required: true
+        description: Opaque ten-character broadcast identifier.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Broadcast joined with its segment rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BroadcastSegment'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+    ArchiveTotals:
+      type: object
+      properties:
+        commercial_count:
+          type: integer
+        news_count:
+          type: integer
+        broadcasts_count:
+          type: integer
+        total_runtime:
+          type: number
+          description: Total runtime of the collection, in hours.
+      example:
+        commercial_count: 396720
+        news_count: 969224
+        broadcasts_count: 98371
+        total_runtime: 58517.5325
+    BroadcastSegment:
+      type: object
+      properties:
+        broadcast_id:
+          type: string
+        broadcast_date:
+          type: string
+          format: date
+        network:
+          type: integer
+        distributor:
+          type: integer
+        broadcast_title:
+          type: string
+        broadcast_type_id:
+          type: integer
+        broadcast_duration:
+          type: integer
+        broadcast_description:
+          type:
+          - string
+          - 'null'
+        broadcast_transcript:
+          type:
+          - string
+          - 'null'
+        broadcast_start_time:
+          type: string
+        legacy_broadcast_id:
+          type: integer
+        date_created:
+          type: string
+          format: date-time
+        date_updated:
+          type: string
+          format: date-time
+        segment_id:
+          type: string
+        segment_broadcast_id:
+          type: string
+        segment_title:
+          type: string
+        segment_description:
+          type:
+          - string
+          - 'null'
+        segment_transcript:
+          type:
+          - string
+          - 'null'
+        segment_duration:
+          type: integer
+        segment_type_id:
+          type: integer
+        segment_start_time:
+          type: string
+        legacy_segment_id:
+          type: integer
+  responses:
+    BadRequest:
+      description: Missing or malformed parameter.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: 'startDate is required (format: YYYY-MM-DD)'
+x-provenance:
+  generated: '2026-09-01'
+  method: derived
+  source: Derived from live unauthenticated probes of https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod on 2026-09-01, plus the endpoint inventory read out of the tvnews.vanderbilt.edu application bundle /assets/index-PmeD9ur1.js. Vanderbilt publishes no OpenAPI for this API.
+  x-operator: institution

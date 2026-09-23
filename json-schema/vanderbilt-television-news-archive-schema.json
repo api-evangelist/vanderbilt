@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/vanderbilt/main/json-schema/vanderbilt-television-news-archive-schema.json",
+  "title": "Vanderbilt Television News Archive",
+  "description": "Object schemas for the Vanderbilt Television News Archive API, derived by API Evangelist from live probed responses on 2026-09-01. Vanderbilt publishes no schema for this API.",
+  "x-provenance": {
+    "generated": "2026-09-01",
+    "method": "derived",
+    "source": "Live unauthenticated probes of https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod on 2026-09-01.",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "ArchiveTotals": {
+      "type": "object",
+      "description": "Aggregate counts for the whole archive.",
+      "properties": {
+        "commercial_count": { "type": "integer" },
+        "news_count": { "type": "integer" },
+        "broadcasts_count": { "type": "integer" },
+        "total_runtime": { "type": "number", "description": "Total runtime of the collection, in hours." }
+      },
+      "required": ["commercial_count", "news_count", "broadcasts_count", "total_runtime"]
+    },
+    "DateRange": {
+      "type": "object",
+      "properties": {
+        "start_date": { "type": "string", "format": "date" },
+        "end_date": { "type": "string", "format": "date" }
+      },
+      "required": ["start_date", "end_date"]
+    },
+    "NamedTerm": {
+      "type": "object",
+      "description": "A controlled-vocabulary term used as a search facet.",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" }
+      },
+      "required": ["id", "name"]
+    },
+    "SegmentSummary": {
+      "type": "object",
+      "description": "A search hit: one news segment within a broadcast.",
+      "properties": {
+        "segment_id": { "type": "string", "description": "Opaque ten-character segment identifier." },
+        "segment_title": { "type": "string" },
+        "network": { "type": "integer", "description": "Network id; resolve against the networks vocabulary from /search/metadata/filters." },
+        "broadcast_date": { "type": "string", "format": "date" },
+        "broadcast_id": { "type": "string" },
+        "segment_duration": { "type": "integer", "description": "Segment length in seconds." }
+      },
+      "required": ["segment_id", "segment_title", "broadcast_id", "broadcast_date"]
+    },
+    "SegmentSearchResult": {
+      "type": "object",
+      "properties": {
+        "data": { "type": "array", "items": { "$ref": "#/$defs/SegmentSummary" } },
+        "total": { "type": "integer", "description": "Result count. Observed as -1 on the keyword endpoint, which does not compute an exact total; a negative value means unknown, not zero." },
+        "page": { "type": "integer" },
+        "size": { "type": "integer" },
+        "keyword": { "type": "string" }
+      },
+      "required": ["data"]
+    },
+    "BroadcastSegment": {
+      "type": "object",
+      "description": "A broadcast row joined with one of its segments, as returned by GET /broadcasts/{broadcastId}.",
+      "properties": {
+        "broadcast_id": { "type": "string" },
+        "broadcast_date": { "type": "string", "format": "date" },
+        "network": { "type": "integer" },
+        "distributor": { "type": "integer" },
+        "broadcast_title": { "type": "string" },
+        "broadcast_type_id": { "type": "integer" },
+        "broadcast_duration": { "type": "integer", "description": "Seconds." },
+        "broadcast_description": { "type": ["string", "null"] },
+        "broadcast_transcript": { "type": ["string", "null"] },
+        "broadcast_start_time": { "type": "string", "description": "Seconds past midnight, serialised as a decimal string (e.g. \"75630.0\")." },
+        "legacy_broadcast_id": { "type": "integer", "description": "Identifier carried over from the pre-migration archive system." },
+        "date_created": { "type": "string", "format": "date-time" },
+        "date_updated": { "type": "string", "format": "date-time" },
+        "segment_id": { "type": "string" },
+        "segment_broadcast_id": { "type": "string" },
+        "segment_title": { "type": "string" },
+        "segment_description": { "type": ["string", "null"] },
+        "segment_transcript": { "type": ["string", "null"], "description": "Observed to carry the literal four-character string \"null\" rather than a JSON null when absent." },
+        "segment_duration": { "type": "integer" },
+        "segment_type_id": { "type": "integer" },
+        "segment_start_time": { "type": "string" },
+        "legacy_segment_id": { "type": "integer" }
+      },
+      "required": ["broadcast_id", "broadcast_date", "segment_id"]
+    },
+    "MetadataFilters": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "broadcast_types": { "type": "array", "items": { "$ref": "#/$defs/NamedTerm" } },
+            "segment_types": { "type": "array", "items": { "$ref": "#/$defs/NamedTerm" } },
+            "networks": { "type": "array", "items": { "$ref": "#/$defs/NamedTerm" } }
+          }
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": { "message": { "type": "string" } },
+      "required": ["message"]
+    }
+  }
+}

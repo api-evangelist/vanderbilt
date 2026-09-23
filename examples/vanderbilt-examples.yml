@@ -1,0 +1,155 @@
+---
+name: Vanderbilt University — Probed Response Examples
+description: >-
+  Verbatim (or lightly truncated) responses captured from Vanderbilt-operated endpoints.
+  Every example below is a real response body observed on the date recorded; none is
+  invented or reconstructed.
+generated: '2026-09-01'
+method: probed
+source: Live unauthenticated HTTP probes on 2026-09-01.
+examples:
+  - name: TVNA service root
+    operator: institution
+    request:
+      method: GET
+      url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+    response:
+      status: 200
+      content_type: application/json
+      body: '{"message": "Welcome to the TVNA Serverless API", "version": "1.0.0", "stage": "prod"}'
+  - name: TVNA archive totals
+    operator: institution
+    request:
+      method: GET
+      url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod/broadcasts
+    response:
+      status: 200
+      body: '{"commercial_count": 396720, "news_count": 969224, "broadcasts_count": 98371, "total_runtime": 58517.5325}'
+  - name: TVNA collection date range
+    operator: institution
+    request:
+      method: GET
+      url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod/broadcasts/full-date-range
+    response:
+      status: 200
+      body: '{"start_date": "1968-08-05", "end_date": "2026-07-31"}'
+  - name: TVNA keyword search
+    operator: institution
+    request:
+      method: POST
+      url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod/broadcasts/search/keyword
+      content_type: application/json
+      body: '{"keyword":"apollo","page":1,"size":2}'
+    response:
+      status: 200
+      body: >-
+        {"data": [{"segment_id": "FrUDsBD3AF", "segment_title": "Apollo-Soyuz / Crews /
+        Soviet Wives", "network": 2, "broadcast_date": "1975-07-18", "broadcast_id":
+        "5PohmVDJ40", "segment_duration": 450}, {"segment_id": "gTg763xLDg",
+        "segment_title": "New York City / Apollo Theater", "network": 1, "broadcast_date":
+        "1988-05-14", "broadcast_id": "8nQuVLqycG", "segment_duration": 200}], "total": -1,
+        "page": 1, "size": 2, "keyword": "apollo"}
+      note: >-
+        total is -1 on this endpoint; the keyword search does not compute an exact result
+        count. Treat a negative total as "unknown", not as zero.
+  - name: TVNA metadata filter vocabularies (truncated)
+    operator: institution
+    request:
+      method: GET
+      url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod/search/metadata/filters
+    response:
+      status: 200
+      body: >-
+        {"data": {"broadcast_types": [{"id": 1, "name": "Evening News"}, {"id": 3, "name":
+        "Nightline"}, {"id": 4, "name": "Note"}, {"id": 2, "name": "Special"}],
+        "segment_types": [{"id": 3, "name": "Commercial"}, {"id": 4, "name": "Good Night"},
+        {"id": 2, "name": "News"}, {"id": 1, "name": "Preview"}, {"id": 5, "name":
+        "Teaser"}], "networks": [{"id": 1, "name": "ABC"}, {"id": 2, "name": "CBS"},
+        {"id": 3, "name": "NBC"}, {"id": 4, "name": "CNN"}, {"id": 5, "name": "FNC"},
+        {"id": 6, "name": "MSNBC"}, ...]}}
+      note: Networks list truncated for length; 20+ networks returned.
+  - name: VUIR OAI-PMH Identify
+    operator: institution
+    request:
+      method: GET
+      url: https://irbe.library.vanderbilt.edu/server/oai/request?verb=Identify
+    response:
+      status: 200
+      content_type: text/xml;charset=UTF-8
+      body: >-
+        <Identify><repositoryName>Vanderbilt Institutional
+        Repository</repositoryName><baseURL>https://irbe.library.vanderbilt.edu/server/oai/request</baseURL><protocolVersion>2.0</protocolVersion><adminEmail>dale.poulter@vanderbilt.edu</adminEmail><earliestDatestamp>2026-04-27T17:09:30Z</earliestDatestamp><deletedRecord>transient</deletedRecord><granularity>YYYY-MM-DDThh:mm:ssZ</granularity><description><oai-identifier><scheme>oai</scheme><repositoryIdentifier>ir.vanderbilt.edu</repositoryIdentifier><delimiter>:</delimiter><sampleIdentifier>oai:ir.vanderbilt.edu:1803/1234</sampleIdentifier></oai-identifier></description></Identify>
+  - name: VUIR DSpace REST root
+    operator: institution
+    request:
+      method: GET
+      url: https://irbe.library.vanderbilt.edu/server/api
+    response:
+      status: 200
+      content_type: application/hal+json
+      body: >-
+        {"dspaceUI": "https://ir.vanderbilt.edu", "dspaceName": "Vanderbilt Institutional
+        Repository", "dspaceServer": "https://irbe.library.vanderbilt.edu/server",
+        "dspaceVersion": "DSpace 9.1", "type": "root", "_links": { ...80 link relations... }}
+  - name: SPARQL query via GET
+    operator: institution
+    request:
+      method: GET
+      url: https://sparql.vanderbilt.edu/sparql?query=SELECT%20(COUNT(*)%20AS%20%3Fc)%20WHERE%20%7B%3Fs%20%3Fp%20%3Fo%7D
+      accept: application/sparql-results+json
+    response:
+      status: 200
+      content_type: application/sparql-results+json
+      body: >-
+        {"head": {"vars": ["c"]}, "results": {"bindings": [{"c": {"datatype":
+        "http://www.w3.org/2001/XMLSchema#integer", "type": "literal", "value":
+        "14366116"}}]}}
+  - name: SPARQL named-graph inventory (truncated)
+    operator: institution
+    request:
+      method: GET
+      url: https://sparql.vanderbilt.edu/sparql
+      query: SELECT DISTINCT ?g WHERE {GRAPH ?g {?s ?p ?o}} LIMIT 25
+    response:
+      status: 200
+      body: >-
+        Named graphs observed include http://bioimages.vanderbilt.edu/people,
+        http://bioimages.vanderbilt.edu/places, http://lod.vanderbilt.edu/vase,
+        http://lod.vanderbilt.edu/apulian/scene, https://sparql.vanderbilt.edu/graphs,
+        http://syriaca.org/persons#graph, http://syriaca.org/geo#graph,
+        http://architecturasinica.org/place/site, http://rs.tdwg.org/,
+        http://vocab.getty.edu/aat/Subjects/, https://nomenclature.info/nom/,
+        https://spear-prosop.org, http://tcadrt.org/timeline.
+  - name: Okta OIDC discovery
+    operator: federation
+    request:
+      method: GET
+      url: https://onevu.vanderbilt.edu/.well-known/openid-configuration
+    response:
+      status: 200
+      body: >-
+        {"issuer": "https://onevu.vanderbilt.edu", "authorization_endpoint":
+        "https://onevu.vanderbilt.edu/oauth2/v1/authorize", "token_endpoint":
+        "https://onevu.vanderbilt.edu/oauth2/v1/token", "jwks_uri":
+        "https://onevu.vanderbilt.edu/oauth2/v1/keys", "scopes_supported": ["openid",
+        "email", "profile", "address", "phone", "offline_access", "groups"],
+        "code_challenge_methods_supported": ["S256"], ...}
+  - name: Dead surface — Azure APIM developer portal recorded in the 2026-06-03 profile
+    operator: institution
+    request:
+      method: GET
+      url: https://apim-portal.app.vanderbilt.edu/
+    response:
+      status: 0
+      body: 'DNS NXDOMAIN from 8.8.8.8 — host does not resolve in public DNS.'
+  - name: Dead surface — VUIT API Services catalog page recorded in the 2026-06-03 profile
+    operator: institution
+    request:
+      method: GET
+      url: https://it.vanderbilt.edu/services/catalog/infrastructure/middleware/application_program_interface_services.php
+    response:
+      status: 500
+      body: >-
+        Persistent HTTP 500. No replacement page found in the current VUIT services catalog
+        index (it.vanderbilt.edu/services/catalog/index.php, 200, 165 links, none matching
+        api/middleware/integration) or in the site search for "API".

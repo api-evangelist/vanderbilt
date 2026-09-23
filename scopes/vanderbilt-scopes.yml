@@ -1,0 +1,40 @@
+---
+name: Vanderbilt University — OAuth Scopes
+description: >-
+  OAuth 2.0 / OpenID Connect scopes advertised by Vanderbilt's federated identity providers.
+  Read directly from each provider's live OpenID Connect Discovery document; nothing here is
+  inferred. Vanderbilt's three public read APIs are unauthenticated and define no scopes of
+  their own.
+generated: '2026-09-01'
+method: probed
+source: >-
+  https://onevu.vanderbilt.edu/.well-known/openid-configuration and
+  https://login.microsoftonline.com/vanderbilt.edu/v2.0/.well-known/openid-configuration,
+  both fetched 2026-09-01, HTTP 200.
+providers:
+  - provider: Vanderbilt Okta (OneVU)
+    operator: federation
+    issuer: https://onevu.vanderbilt.edu
+    scopes:
+      - { scope: openid, description: OpenID Connect authentication request. }
+      - { scope: profile, description: Basic profile claims. }
+      - { scope: email, description: Email address and verification status. }
+      - { scope: address, description: Postal address claim. }
+      - { scope: phone, description: Phone number claim. }
+      - { scope: offline_access, description: Refresh token issuance. }
+      - { scope: groups, description: Okta group membership claim. }
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - password
+      - 'urn:ietf:params:oauth:grant-type:device_code'
+      - 'urn:openid:params:grant-type:ciba'
+  - provider: Vanderbilt Microsoft Entra ID
+    operator: federation
+    issuer: https://login.microsoftonline.com/ba5a7f39-e3be-4ab3-b450-67fa80faecad/v2.0
+    scopes:
+      - { scope: openid, description: OpenID Connect authentication request. }
+      - { scope: profile, description: Basic profile claims. }
+      - { scope: email, description: Email address claim. }
+      - { scope: offline_access, description: Refresh token issuance. }

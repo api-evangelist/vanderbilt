@@ -1,0 +1,51 @@
+---
+name: Vanderbilt University — Observed Error Responses
+description: >-
+  Error shapes actually returned by Vanderbilt-operated endpoints during live probing.
+  Recorded because they are the practical constraints an integrator hits, and because two of
+  them are operational defects worth reporting back to the institution rather than scoring
+  against it.
+generated: '2026-09-01'
+method: probed
+source: Live HTTP probes on 2026-09-01.
+errors:
+  - surface: Vanderbilt Television News Archive API
+    status: 400
+    endpoint: GET /broadcasts/calendar
+    shape: '{"message": "startDate is required (format: YYYY-MM-DD)"}'
+    detail: >-
+      The calendar endpoint rejects year/month parameters; it wants startDate (and
+      optionally endDate) as YYYY-MM-DD. Errors are a flat object with a single `message`
+      string — no code, no type, no request id.
+  - surface: Vanderbilt Television News Archive API
+    status: 504
+    endpoint: POST /broadcasts/search
+    shape: '{"message": "Endpoint request timed out"}'
+    detail: >-
+      The faceted search endpoint exceeded the AWS API Gateway 29-second integration
+      timeout on a two-row query ({"query":"reagan","page":1,"size":2}). This is the
+      gateway's own error, not the application's. The narrower
+      POST /broadcasts/search/keyword answered the equivalent query in under a second and
+      is the working path. Reported as an observation, not a score penalty.
+  - surface: Vanderbilt Television News Archive media service
+    status: 200
+    endpoint: GET /Prod/streaming and GET /Prod/downloads on mg3i9n0474.execute-api.us-east-1.amazonaws.com
+    shape: '{"statusCode": 400, "body": "{\"error\": \"Missing guid parameter\"}"}'
+    detail: >-
+      A Lambda proxy-integration mismatch: the function returns an un-unwrapped
+      {statusCode, body} envelope, so a client error is delivered with HTTP 200 and the
+      real status buried in the body. Any consumer checking the HTTP status alone will read
+      a failure as a success.
+  - surface: it.vanderbilt.edu
+    status: 500
+    endpoint: GET /services/catalog/infrastructure/middleware/application_program_interface_services.php
+    detail: >-
+      Persistent server error on the VUIT API Services catalog page recorded in the
+      2026-06-03 profile. No replacement exists in the current services catalog index.
+      Pointer removed from apis.yml.
+  - surface: apim-portal.app.vanderbilt.edu
+    status: 0
+    detail: >-
+      DNS NXDOMAIN. The Azure API Management developer portal recorded in the 2026-06-03
+      profile as "internal/network-gated" does not resolve in public DNS at all. Pointer
+      removed from apis.yml.

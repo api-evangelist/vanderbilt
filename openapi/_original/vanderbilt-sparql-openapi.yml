@@ -1,0 +1,112 @@
+openapi: 3.1.0
+info:
+  title: Vanderbilt Libraries SPARQL Endpoint
+  version: '1.1'
+  description: >-
+    Public SPARQL 1.1 Protocol endpoint operated by the Jean and Alexander Heard Libraries
+    at Vanderbilt University, serving the linked-data holdings produced by the Libraries'
+    Linked Data, Wikidata and Semantic Web working groups. Unauthenticated and open to the
+    public. As of the probe date the store answers a COUNT over the default union graph with
+    14,366,116 triples across named graphs including bioimages.vanderbilt.edu (people and
+    places), lod.vanderbilt.edu (Apulian vase iconography), syriaca.org, architecturasinica.org,
+    rs.tdwg.org and Getty AAT extracts.
+
+    This document was DERIVED by API Evangelist from live probes on 2026-09-01. Vanderbilt
+    publishes no OpenAPI for the endpoint. The operations described are the SPARQL 1.1
+    Protocol query bindings that were actually exercised and observed to return
+    application/sparql-results+json.
+  contact:
+    name: Jean and Alexander Heard Libraries, Digital Scholarship
+    url: https://www.library.vanderbilt.edu/
+  externalDocs:
+    description: SPARQL 1.1 Protocol (W3C Recommendation)
+    url: https://www.w3.org/TR/sparql11-protocol/
+servers:
+  - url: https://sparql.vanderbilt.edu
+    description: Production endpoint on Vanderbilt's own registrable domain.
+tags:
+  - name: SPARQL
+    description: SPARQL 1.1 query operations.
+paths:
+  /sparql:
+    get:
+      tags: [SPARQL]
+      operationId: querySparqlViaGet
+      summary: Execute a SPARQL query via URL-encoded GET
+      description: SPARQL 1.1 Protocol "query via GET" binding.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: A SPARQL 1.1 query string.
+          schema: { type: string }
+        - name: default-graph-uri
+          in: query
+          required: false
+          schema: { type: array, items: { type: string, format: uri } }
+        - name: named-graph-uri
+          in: query
+          required: false
+          schema: { type: array, items: { type: string, format: uri } }
+      responses:
+        '200':
+          description: Query results.
+          content:
+            application/sparql-results+json:
+              schema: { $ref: '#/components/schemas/SparqlResults' }
+            application/sparql-results+xml:
+              schema: { type: string }
+        '400':
+          description: Missing or malformed query.
+    post:
+      tags: [SPARQL]
+      operationId: querySparqlViaPost
+      summary: Execute a SPARQL query via direct POST
+      description: >-
+        SPARQL 1.1 Protocol "query via POST directly" binding, observed returning 200 for a
+        request body of media type application/sparql-query.
+      requestBody:
+        required: true
+        content:
+          application/sparql-query:
+            schema: { type: string }
+      responses:
+        '200':
+          description: Query results.
+          content:
+            application/sparql-results+json:
+              schema: { $ref: '#/components/schemas/SparqlResults' }
+components:
+  schemas:
+    SparqlResults:
+      type: object
+      description: SPARQL 1.1 Query Results JSON Format.
+      properties:
+        head:
+          type: object
+          properties:
+            vars: { type: array, items: { type: string } }
+        results:
+          type: object
+          properties:
+            bindings:
+              type: array
+              items:
+                type: object
+                additionalProperties: { $ref: '#/components/schemas/RdfTerm' }
+    RdfTerm:
+      type: object
+      properties:
+        type: { type: string, enum: [uri, literal, bnode] }
+        value: { type: string }
+        datatype: { type: string, format: uri }
+        'xml:lang': { type: string }
+x-provenance:
+  generated: '2026-09-01'
+  method: derived
+  source: >-
+    Derived from live unauthenticated probes of https://sparql.vanderbilt.edu/sparql on
+    2026-09-01 (GET with url-encoded query -> 200 application/sparql-results+json; POST with
+    application/sparql-query -> 200; SELECT DISTINCT ?g over GRAPH -> named-graph inventory;
+    SELECT (COUNT(*)) -> 14,366,116). Vanderbilt publishes no OpenAPI for the endpoint.
+  x-operator: institution

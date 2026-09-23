@@ -1,0 +1,345 @@
+# x-archived-from: vanderbilt-television-news-archive-openapi.yml
+# x-archived-on: 2026-09-16
+openapi: 3.1.0
+info:
+  title: Vanderbilt Television News Archive API
+  version: 1.0.0
+  description: >-
+    Read API for the Vanderbilt Television News Archive, the Jean and Alexander Heard
+    Libraries' collection of United States network television news broadcasts recorded
+    continuously since August 5, 1968. The service self-identifies as the "TVNA Serverless
+    API" and backs the tvnews.vanderbilt.edu single-page application. As of the probe date
+    the collection reports 98,371 broadcasts, 969,224 news segments and 396,720 commercial
+    segments.
+
+    This document was DERIVED by API Evangelist from live, unauthenticated probes of the
+    running service on 2026-09-01. Vanderbilt publishes no OpenAPI for it. Only operations
+    that were actually called and observed are described here; request and response shapes
+    reflect observed payloads, not a vendor contract. The operator is the institution: the
+    archive, its data and its deployment belong to Vanderbilt University.
+  contact:
+    name: Vanderbilt Television News Archive, Jean and Alexander Heard Libraries
+    url: https://tvnews.vanderbilt.edu/
+  license:
+    name: Terms of use published by the Vanderbilt Television News Archive
+    url: https://blog.tvnews.vanderbilt.edu/welcome/access-information/
+servers:
+  - url: https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod
+    description: >-
+      Production stage. AWS API Gateway is Vanderbilt's own deployment infrastructure here,
+      not a third-party SaaS product; the endpoint is referenced directly by the
+      tvnews.vanderbilt.edu application bundle.
+tags:
+  - name: Broadcasts
+    description: Broadcast and segment records in the archive.
+  - name: Search
+    description: Keyword and faceted search over broadcast segments.
+  - name: Metadata
+    description: Controlled vocabularies used to filter the archive.
+  - name: Service
+    description: Service identification.
+paths:
+  /:
+    get:
+      tags: [Service]
+      operationId: getServiceRoot
+      summary: Service identification
+      description: Returns the service name, version and deployment stage.
+      responses:
+        '200':
+          description: Service banner.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  version: { type: string }
+                  stage: { type: string }
+              example:
+                message: Welcome to the TVNA Serverless API
+                version: 1.0.0
+                stage: prod
+  /broadcasts:
+    get:
+      tags: [Broadcasts]
+      operationId: getArchiveTotals
+      summary: Archive-wide counts
+      description: Aggregate counts for the whole archive and total runtime in hours.
+      responses:
+        '200':
+          description: Collection totals.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveTotals'
+  /broadcasts/full-date-range:
+    get:
+      tags: [Broadcasts]
+      operationId: getFullDateRange
+      summary: Earliest and latest broadcast dates held
+      responses:
+        '200':
+          description: Inclusive date range of the collection.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start_date: { type: string, format: date }
+                  end_date: { type: string, format: date }
+                example:
+                  start_date: '1968-08-05'
+                  end_date: '2026-07-31'
+  /broadcasts/calendar:
+    get:
+      tags: [Broadcasts]
+      operationId: getBroadcastCalendar
+      summary: Broadcasts available within a date window
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          description: Inclusive start of the window, YYYY-MM-DD.
+          schema: { type: string, format: date }
+        - name: endDate
+          in: query
+          required: false
+          description: Inclusive end of the window, YYYY-MM-DD.
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Calendar of broadcasts in the window.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /broadcasts/{broadcastId}:
+    get:
+      tags: [Broadcasts]
+      operationId: getBroadcast
+      summary: Retrieve one broadcast and its segments
+      parameters:
+        - name: broadcastId
+          in: path
+          required: true
+          description: Opaque ten-character broadcast identifier.
+          schema: { type: string }
+      responses:
+        '200':
+          description: Broadcast joined with its segment rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/BroadcastSegment' }
+  /broadcasts/search/keyword:
+    post:
+      tags: [Search]
+      operationId: searchByKeyword
+      summary: Keyword search across segment titles, descriptions and transcripts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [keyword]
+              properties:
+                keyword: { type: string }
+                page: { type: integer, minimum: 1, default: 1 }
+                size: { type: integer, minimum: 1, default: 20 }
+      responses:
+        '200':
+          description: Paged segment hits.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SegmentSearchResult' }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /broadcasts/search:
+    post:
+      tags: [Search]
+      operationId: searchBroadcasts
+      summary: Faceted search over broadcasts and segments
+      description: >-
+        Faceted search accepting the filter vocabularies returned by
+        /search/metadata/filters. Observed to exceed the API Gateway 29-second
+        integration timeout on broad queries; see errors/vanderbilt-errors.yml.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query: { type: string }
+                page: { type: integer, minimum: 1, default: 1 }
+                size: { type: integer, minimum: 1, default: 20 }
+      responses:
+        '200':
+          description: Paged results.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SegmentSearchResult' }
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+  /search/metadata/filters:
+    get:
+      tags: [Metadata]
+      operationId: getMetadataFilters
+      summary: Controlled vocabularies available as search facets
+      parameters:
+        - name: startDate
+          in: query
+          required: false
+          schema: { type: string, format: date }
+        - name: endDate
+          in: query
+          required: false
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Broadcast types, segment types and networks.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MetadataFilters' }
+  /auth/sso-providers:
+    get:
+      tags: [Service]
+      operationId: listSsoProviders
+      summary: Subscribing institutions with federated sign-in configured
+      description: >-
+        Lists the email domains and identity-provider names of subscribing institutions
+        whose users can sign in through their home institution rather than a local account.
+      responses:
+        '200':
+          description: Configured SSO domains.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        domain: { type: string }
+                        identity_provider_name: { type: string }
+components:
+  responses:
+    BadRequest:
+      description: Missing or malformed parameter.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            message: 'startDate is required (format: YYYY-MM-DD)'
+    Unauthorized:
+      description: Sign-in required for this operation.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    GatewayTimeout:
+      description: Upstream integration exceeded the gateway timeout.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            message: Endpoint request timed out
+  schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+    ArchiveTotals:
+      type: object
+      properties:
+        commercial_count: { type: integer }
+        news_count: { type: integer }
+        broadcasts_count: { type: integer }
+        total_runtime:
+          type: number
+          description: Total runtime of the collection, in hours.
+      example:
+        commercial_count: 396720
+        news_count: 969224
+        broadcasts_count: 98371
+        total_runtime: 58517.5325
+    SegmentSummary:
+      type: object
+      properties:
+        segment_id: { type: string }
+        segment_title: { type: string }
+        network: { type: integer, description: Network id from MetadataFilters.networks. }
+        broadcast_date: { type: string, format: date }
+        broadcast_id: { type: string }
+        segment_duration: { type: integer, description: Seconds. }
+    SegmentSearchResult:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/SegmentSummary' }
+        total:
+          type: integer
+          description: >-
+            Observed as -1 on the keyword endpoint, which does not compute an exact
+            total; treat a negative value as "unknown".
+        page: { type: integer }
+        size: { type: integer }
+        keyword: { type: string }
+    BroadcastSegment:
+      type: object
+      properties:
+        broadcast_id: { type: string }
+        broadcast_date: { type: string, format: date }
+        network: { type: integer }
+        distributor: { type: integer }
+        broadcast_title: { type: string }
+        broadcast_type_id: { type: integer }
+        broadcast_duration: { type: integer }
+        broadcast_description: { type: [string, 'null'] }
+        broadcast_transcript: { type: [string, 'null'] }
+        broadcast_start_time: { type: string }
+        legacy_broadcast_id: { type: integer }
+        date_created: { type: string, format: date-time }
+        date_updated: { type: string, format: date-time }
+        segment_id: { type: string }
+        segment_broadcast_id: { type: string }
+        segment_title: { type: string }
+        segment_description: { type: [string, 'null'] }
+        segment_transcript: { type: [string, 'null'] }
+        segment_duration: { type: integer }
+        segment_type_id: { type: integer }
+        segment_start_time: { type: string }
+        legacy_segment_id: { type: integer }
+    MetadataFilters:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            broadcast_types: { type: array, items: { $ref: '#/components/schemas/NamedTerm' } }
+            segment_types: { type: array, items: { $ref: '#/components/schemas/NamedTerm' } }
+            networks: { type: array, items: { $ref: '#/components/schemas/NamedTerm' } }
+    NamedTerm:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+x-provenance:
+  generated: '2026-09-01'
+  method: derived
+  source: >-
+    Derived from live unauthenticated probes of
+    https://7itm2l2dz8.execute-api.us-east-1.amazonaws.com/prod on 2026-09-01, plus the
+    endpoint inventory read out of the tvnews.vanderbilt.edu application bundle
+    /assets/index-PmeD9ur1.js. Vanderbilt publishes no OpenAPI for this API.
+  x-operator: institution

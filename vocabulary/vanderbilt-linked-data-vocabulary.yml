@@ -1,0 +1,71 @@
+---
+name: Vanderbilt Libraries Linked Data — Named Graphs and Vocabularies
+description: >-
+  The named graphs actually present in Vanderbilt's public SPARQL store, and the external
+  vocabularies they draw on. Read from the store itself with
+  SELECT DISTINCT ?g WHERE {GRAPH ?g {?s ?p ?o}} — this is an inventory of what is deployed,
+  not a curated list of what the Libraries say they hold.
+generated: '2026-09-01'
+method: probed
+source: >-
+  https://sparql.vanderbilt.edu/sparql, queried 2026-09-01. Store reports 14,366,116 triples.
+  Sample below is the first 25 distinct graphs returned; the store holds more.
+operator: institution
+vanderbilt_graphs:
+  - uri: http://bioimages.vanderbilt.edu/people
+    description: People records supporting Bioimages, the Vanderbilt biological images collection.
+  - uri: http://bioimages.vanderbilt.edu/places
+    description: Place records supporting Bioimages.
+  - uri: http://lod.vanderbilt.edu/vase
+    description: Vanderbilt linked open data for the Apulian vase collection.
+  - uri: http://lod.vanderbilt.edu/apulian/scene
+    description: Scene-level iconographic description of Apulian vases.
+  - uri: https://sparql.vanderbilt.edu/graphs
+    description: Self-describing graph registry for the endpoint.
+project_graphs:
+  - uri: http://syriaca.org/persons#graph
+    description: Syriaca.org prosopography (Syriac studies gazetteer and person authority).
+  - uri: http://syriaca.org/geo#graph
+    description: Syriaca.org geographic gazetteer.
+  - uri: http://syriaca.org/bibl#graph
+    description: Syriaca.org bibliography.
+  - uri: http://syriaca.org/taxonomy#graph
+    description: Syriaca.org taxonomy.
+  - uri: https://spear-prosop.org
+    description: SPEAR — Syriac Persons, Events and Relations.
+  - uri: http://architecturasinica.org/place/site
+    description: Architectura Sinica — sites.
+  - uri: http://architecturasinica.org/place/building
+    description: Architectura Sinica — buildings.
+  - uri: http://architecturasinica.org/place/image
+    description: Architectura Sinica — images.
+  - uri: http://tcadrt.org/timeline
+    description: Timeline data for the TCADRT project.
+external_vocabularies_loaded:
+  - uri: http://vocab.getty.edu/aat/Subjects/
+    description: Getty Art & Architecture Thesaurus subjects extract.
+  - uri: http://vocab.getty.edu/aat/ScopeNotes/
+    description: Getty AAT scope notes extract.
+  - uri: http://vocab.getty.edu/aat/ContribRels/
+    description: Getty AAT contributor relations extract.
+  - uri: http://AATOut_2Terms
+    description: Getty AAT terms extract.
+  - uri: http://AATOut_SourceRels
+    description: Getty AAT source relations extract.
+  - uri: http://rs.tdwg.org/
+    description: TDWG (Biodiversity Information Standards) vocabularies.
+  - uri: http://rs.tdwg.org/cv/status
+    description: TDWG controlled-vocabulary status terms.
+  - uri: https://nomenclature.info/nom/
+    description: Nomenclature for Museum Cataloging.
+  - uri: http://wikidata-art-superclasses
+    description: Wikidata art superclass extract, from the Libraries' Wikidata working group.
+  - uri: http://work-class-links
+    description: Work-class crosswalk graph.
+  - uri: https://art-classification-crosswalks
+    description: Art classification crosswalks.
+related:
+  - name: Heard Libraries Linked Data working group
+    url: https://github.com/HeardLibrary/linked-data
+  - name: Heard Libraries Semantic Web working group
+    url: https://github.com/HeardLibrary/semantic-web
