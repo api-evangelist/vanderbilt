@@ -26,15 +26,21 @@ image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/vanderbilt
 url: https://raw.githubusercontent.com/api-evangelist/vanderbilt/refs/heads/main/apis.yml
 deliveryModel:
   model: saas
-  open_source: false
-  commercial: false
+  license_evidence:
+    not_product:
+    - heardlibrary/linked-data
+    - heardlibrary/vu-ir
+  open_source: unknown
+  commercial: true
   callable_host: true
   label: Hosted service · you call their endpoint
-  confidence: high
+  confidence: low
   source:
-    - probed
-  generated: '2026-09-01'
-  method: probed
+  - openapi
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 accessModel:
   pricing: free
   onboarding: none
