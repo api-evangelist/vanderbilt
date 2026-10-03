@@ -84,42 +84,11 @@ paths:
         '504':
           $ref: '#/components/responses/GatewayTimeout'
 components:
-  responses:
-    GatewayTimeout:
-      description: Upstream integration exceeded the gateway timeout.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            message: Endpoint request timed out
-    Unauthorized:
-      description: Sign-in required for this operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
       properties:
         message:
-          type: string
-    SegmentSearchResult:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentSummary'
-        total:
-          type: integer
-          description: Observed as -1 on the keyword endpoint, which does not compute an exact total; treat a negative value as "unknown".
-        page:
-          type: integer
-        size:
-          type: integer
-        keyword:
           type: string
     SegmentSummary:
       type: object
@@ -139,6 +108,37 @@ components:
         segment_duration:
           type: integer
           description: Seconds.
+    SegmentSearchResult:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentSummary'
+        total:
+          type: integer
+          description: Observed as -1 on the keyword endpoint, which does not compute an exact total; treat a negative value as "unknown".
+        page:
+          type: integer
+        size:
+          type: integer
+        keyword:
+          type: string
+  responses:
+    Unauthorized:
+      description: Sign-in required for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: Upstream integration exceeded the gateway timeout.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: Endpoint request timed out
 x-provenance:
   generated: '2026-09-01'
   method: derived
