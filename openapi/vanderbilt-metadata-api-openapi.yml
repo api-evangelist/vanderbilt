@@ -44,6 +44,13 @@ paths:
                 $ref: '#/components/schemas/MetadataFilters'
 components:
   schemas:
+    NamedTerm:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
     MetadataFilters:
       type: object
       properties:
@@ -62,13 +69,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/NamedTerm'
-    NamedTerm:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
 x-provenance:
   generated: '2026-09-01'
   method: derived

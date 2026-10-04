@@ -85,11 +85,6 @@ paths:
           $ref: '#/components/responses/GatewayTimeout'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
     SegmentSummary:
       type: object
       properties:
@@ -123,6 +118,11 @@ components:
         size:
           type: integer
         keyword:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
           type: string
   responses:
     Unauthorized:

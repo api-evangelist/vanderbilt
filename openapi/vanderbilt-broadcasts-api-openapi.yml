@@ -110,6 +110,28 @@ paths:
                       $ref: '#/components/schemas/BroadcastSegment'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+    ArchiveTotals:
+      type: object
+      properties:
+        commercial_count:
+          type: integer
+        news_count:
+          type: integer
+        broadcasts_count:
+          type: integer
+        total_runtime:
+          type: number
+          description: Total runtime of the collection, in hours.
+      example:
+        commercial_count: 396720
+        news_count: 969224
+        broadcasts_count: 98371
+        total_runtime: 58517.5325
     BroadcastSegment:
       type: object
       properties:
@@ -168,28 +190,6 @@ components:
           type: string
         legacy_segment_id:
           type: integer
-    ArchiveTotals:
-      type: object
-      properties:
-        commercial_count:
-          type: integer
-        news_count:
-          type: integer
-        broadcasts_count:
-          type: integer
-        total_runtime:
-          type: number
-          description: Total runtime of the collection, in hours.
-      example:
-        commercial_count: 396720
-        news_count: 969224
-        broadcasts_count: 98371
-        total_runtime: 58517.5325
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
   responses:
     BadRequest:
       description: Missing or malformed parameter.
