@@ -72,7 +72,7 @@ tags:
   - Tennessee
   - United States
 created: '2026-06-03'
-modified: '2026-09-01'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: vanderbilt:institutional-repository
@@ -353,6 +353,8 @@ apis:
   - type: SourceCode
     url: https://github.com/HeardLibrary/linked-data
 common:
+  - url: https://news.vanderbilt.edu/feed/
+    type: BlogRSS
   - type: Website
     url: https://www.vanderbilt.edu/
   - type: PrivacyPolicy
