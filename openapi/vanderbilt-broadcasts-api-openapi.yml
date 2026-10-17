@@ -109,12 +109,16 @@ paths:
                     items:
                       $ref: '#/components/schemas/BroadcastSegment'
 components:
+  responses:
+    BadRequest:
+      description: Missing or malformed parameter.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: 'startDate is required (format: YYYY-MM-DD)'
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
     ArchiveTotals:
       type: object
       properties:
@@ -190,15 +194,11 @@ components:
           type: string
         legacy_segment_id:
           type: integer
-  responses:
-    BadRequest:
-      description: Missing or malformed parameter.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            message: 'startDate is required (format: YYYY-MM-DD)'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
 x-provenance:
   generated: '2026-09-01'
   method: derived

@@ -79,6 +79,22 @@ paths:
                 $ref: '#/components/schemas/SparqlResults'
 components:
   schemas:
+    RdfTerm:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - uri
+          - literal
+          - bnode
+        value:
+          type: string
+        datatype:
+          type: string
+          format: uri
+        xml:lang:
+          type: string
     SparqlResults:
       type: object
       description: SPARQL 1.1 Query Results JSON Format.
@@ -99,22 +115,6 @@ components:
                 type: object
                 additionalProperties:
                   $ref: '#/components/schemas/RdfTerm'
-    RdfTerm:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - uri
-          - literal
-          - bnode
-        value:
-          type: string
-        datatype:
-          type: string
-          format: uri
-        xml:lang:
-          type: string
 x-provenance:
   generated: '2026-09-01'
   method: derived

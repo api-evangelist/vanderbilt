@@ -85,6 +85,22 @@ paths:
           $ref: '#/components/responses/GatewayTimeout'
 components:
   schemas:
+    SegmentSearchResult:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentSummary'
+        total:
+          type: integer
+          description: Observed as -1 on the keyword endpoint, which does not compute an exact total; treat a negative value as "unknown".
+        page:
+          type: integer
+        size:
+          type: integer
+        keyword:
+          type: string
     SegmentSummary:
       type: object
       properties:
@@ -103,22 +119,6 @@ components:
         segment_duration:
           type: integer
           description: Seconds.
-    SegmentSearchResult:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentSummary'
-        total:
-          type: integer
-          description: Observed as -1 on the keyword endpoint, which does not compute an exact total; treat a negative value as "unknown".
-        page:
-          type: integer
-        size:
-          type: integer
-        keyword:
-          type: string
     Error:
       type: object
       properties:
